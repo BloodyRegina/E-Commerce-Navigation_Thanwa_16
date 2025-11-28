@@ -12,19 +12,31 @@ import UserProfile from "./pages/UserProfile"
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
+// Define the common header options
+const commonHeaderOptions = {
+  headerStyle: { backgroundColor: "#3b82f6" },
+  headerTintColor: "#fff",
+  headerTitleStyle: { fontWeight: "bold" },
+};
+
 function HomeStackScreen() {
   return (
     <Stack.Navigator
-      screenOptions={{
-        headerStyle: { backgroundColor: "#3b82f6" },
-        headerTintColor: "#fff",
-        headerTitleStyle: { fontWeight: "bold" },
-      }}
+      // Apply common header options to the Stack Navigator
+      screenOptions={commonHeaderOptions}
     >
       <Stack.Screen name="Home" component={MainPage} />
+      {/* NOTE: These screens are part of the stack, 
+        so they inherit the header from the Stack.Navigator.
+        You can remove these from the Tab Navigator to avoid duplication.
+      */}
       <Stack.Screen name="ProductDetail" component={ProductDetail} />
-      <Stack.Screen name="ShoppingCart" component={ShoppingCart} />
-      <Stack.Screen name="UserProfile" component={UserProfile} />
+      {/* We'll keep ShoppingCart and UserProfile out of the Home stack 
+        to ensure the tab bar always takes you to the 'root' of those screens.
+        If you need them deep-linked from MainPage, keep them here too.
+      */}
+      {/* <Stack.Screen name="ShoppingCart" component={ShoppingCart} /> */}
+      {/* <Stack.Screen name="UserProfile" component={UserProfile} /> */}
     </Stack.Navigator>
   );
 }
@@ -44,40 +56,42 @@ export default function App() {
             paddingBottom: 8,
             paddingTop: 8,
           },
+          // Apply common header options directly to the Tab Navigator's screens
+          ...commonHeaderOptions, 
         }}
       >
         <Tab.Screen
-          name="Home"
+          name="HomeTab" // Changed name to avoid conflict with the Stack.Screen name
           component={HomeStackScreen}
           options={{
             title: "Home",
-            headerShown: false, 
+            headerShown: false, // The header will be provided by HomeStackScreen
             tabBarIcon: ({ color, size }) => (
               <span style={{ fontSize: size, color }}>🏠</span>
             ),
           }}
         />
         <Tab.Screen
-          name="ShoppingCart"
+          name="ShoppingCartTab"
           component={ShoppingCart}
           options={{
-            title: "ShoppingCart", 
-            headerTitle: "ShoppingCart",
+            // The header style is inherited from Tab.Navigator screenOptions
+            title: "Shopping Cart", 
+            headerTitle: "Shopping Cart", // Ensure the title is set
             tabBarBadge: 10,
             tabBarIcon: ({ color, size }) => (
-
               <span style={{ fontSize: size, color }}>🛒</span>
             ),
           }}
         />
         <Tab.Screen
-          name="UserProfile"
+          name="UserProfileTab"
           component={UserProfile}
           options={{
-            title: "UserProfile", 
-            headerTitle: "UserProfile",
+            // The header style is inherited from Tab.Navigator screenOptions
+            title: "User Profile", 
+            headerTitle: "User Profile", // Ensure the title is set
             tabBarIcon: ({ color, size }) => (
-  
               <span style={{ fontSize: size, color }}>👤</span>
             ),
           }}
