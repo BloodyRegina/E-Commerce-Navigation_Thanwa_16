@@ -63,6 +63,7 @@ export default function App() {
           options={{
             title: "ShoppingCart", 
             headerTitle: "ShoppingCart",
+            tabBarBadge: 10,
             tabBarIcon: ({ color, size }) => (
 
               <span style={{ fontSize: size, color }}>🛒</span>
